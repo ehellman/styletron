@@ -2,6 +2,7 @@
 // TypeScript Version: 2.1
 
 import * as React from "react";
+import * as CSS from 'csstype';
 import StyletronServer from "styletron-server";
 import StyletronClient from "styletron-client";
 
@@ -71,13 +72,15 @@ declare namespace StyletronReact {
     innerRef?: React.Ref<TInstance>;
   };
 
-  type AssignProps<TOuterProps, TInnerProps> = (styletron: StyletronServer | StyletronClient, style: React.CSSProperties, props?: TOuterProps) => TInnerProps;
+  type AssignProps<TOuterProps, TInnerProps> = (styletron: StyletronServer | StyletronClient, style: CSS.Properties, props?: TOuterProps) => TInnerProps;
 
-  type Style<TProps> = React.CSSProperties | StyleFunction<TProps>;
+  type CSS = CSS.Properties & {[P in CSS.Pseudos]?: CSS.Properties} & {[key: string]: any};
 
-  // Intersecting `CSSProperties` enables autocompletion for CSS properties as
+  type Style<TProps> = CSS | StyleFunction<TProps>;
+
+  // Intersecting `CSS.Properties` enables autocompletion for CSS properties as
   // plain objects and not only for function return objects
-  type StyleFunction<TProps> = React.CSSProperties & ((props: TProps, context?: any) => React.CSSProperties);
+  type StyleFunction<TProps> = CSS & ((props: TProps, context?: any) => CSS);
 
   interface BasePropsMap<TProps> {
     a: HTMLProps<TProps, React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>;
